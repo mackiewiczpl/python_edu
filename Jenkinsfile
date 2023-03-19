@@ -1,17 +1,21 @@
 pipeline {
-    agent any
-    stages {	
-		stage('input') {
-			try {
-				timeout(time:10, unit:'SECONDS') {
-					response = input message: 'User',
-						parameters: [string(defaultValue: 'user1',
-						description: 'Enter Userid:', name: 'userid')]
-				}
-			}
-			catch (err) {
-				response = 'user1'
-			}
-		}
-	}	
+  agent any
+  stages {
+    stage ("Prompt for input") {
+      steps {
+        script {
+          env.USERNAME = input message: 'Please enter the username',
+                             parameters: [string(defaultValue: '',
+                                          description: '',
+                                          name: 'Username')]
+          env.PASSWORD = input message: 'Please enter the password',
+                             parameters: [password(defaultValue: '',
+                                          description: '',
+                                          name: 'Password')]
+        }
+        echo "Username: ${env.USERNAME}"
+        echo "Password: ${env.PASSWORD}"
+      }
+    }
+  }
 }
