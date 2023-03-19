@@ -1,10 +1,15 @@
 pipeline {
     agent any 
-    stages {
-        stage('Stage 1') {
-            steps {
-                echo 'Hello world on feature 1!' 
-            }
-        }
-    }
+    stage('input') {
+		try {
+			timeout(time:10, unit:'SECONDS') {
+				response = input message: 'User',
+					parameters: [string(defaultValue: 'user1',
+					description: 'Enter Userid:', name: 'userid')]
+			}
+		}
+		catch (err) {
+			response = 'user1'
+		}
+	}
 }
